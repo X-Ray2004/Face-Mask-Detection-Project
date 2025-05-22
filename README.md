@@ -1,369 +1,197 @@
-Face Mask Detection
+# 🧠 Face Mask Detection
 
-Overview
+**Face Mask Detection** is a computer vision application designed to detect whether individuals in images or live video streams are wearing face masks. It leverages machine learning techniques and image processing to extract facial features and classify them as **"With Mask"** or **"Without Mask"**.
 
-The Face Mask Detection project is a computer vision application designed to detect whether individuals in images or live video streams are wearing face masks. It leverages machine learning techniques and image processing to extract features from facial images and classify them as "With Mask" or "Without Mask." The project is built using Python, OpenCV, and scikit-learn, and supports both batch image processing and real-time webcam detection.
+The project supports **batch image processing** and **real-time webcam detection**, making it ideal for **public health monitoring**, **security systems**, or **compliance automation** in environments requiring mask usage.
 
-This project is ideal for applications in public health monitoring, security systems, or automated compliance checking in environments requiring mask-wearing.
+---
 
-Features
+## 🚀 Features
 
+- **Batch Image Processing:** Detects and classifies mask-wearing status in folders of images.
+- **Real-Time Detection:** Detects mask usage in live webcam video streams.
+- **Feature Extraction:** Combines HOG, Chain Code, and GLCM features for robust facial representation.
+- **Model Training:** Trains and compares SVM, Logistic Regression, Random Forest, and k-NN classifiers.
+- **Dimensionality Reduction:** Uses PCA to enhance performance and reduce complexity.
 
+---
 
+## 📦 Prerequisites
 
+- Python 3.8 or higher
+- Webcam (for real-time detection)
+- OpenCV's Haar Cascade file: `haarcascade_frontalface_default.xml`
 
-Batch Image Processing: Processes a folder of images to detect faces and classify mask-wearing status, saving annotated results.
+Install required libraries:
 
-
-
-Real-Time Detection: Uses a webcam to detect and classify mask-wearing in real-time video streams.
-
-
-
-Feature Extraction: Combines Histogram of Oriented Gradients (HOG), Chain Code, and Gray-Level Co-occurrence Matrix (GLCM) features for robust classification.
-
-
-
-Model Training: Trains and compares multiple machine learning models (SVM, Logistic Regression, Random Forest, k-NN) to select the best performer.
-
-
-
-Dimensionality Reduction: Applies Principal Component Analysis (PCA) to reduce feature dimensions for efficient processing.
-
-Prerequisites
-
-Before running the project, ensure you have the following installed:
-
-
-
-
-
-Python 3.8 or higher
-
-
-
-Required Python libraries (install via pip):
-
+```bash
 pip install opencv-python numpy scikit-learn scikit-image joblib
-
-
-
-A webcam (for real-time detection)
-
-
-
-OpenCV's Haar Cascade XML file (haarcascade_frontalface_default.xml), included with OpenCV installation.
-
-Project Structure
-
+📁 Project Structure
+bash
+Copy
+Edit
 face-mask-detection/
 ├── dataset/
-│   ├── with_mask/              # Images of people wearing masks
-│   └── without_mask/           # Images of people not wearing masks
+│   ├── with_mask/              # Training images with masks
+│   └── without_mask/           # Training images without masks
 ├── images/                     # Input images for batch processing
 ├── result/                     # Output images with annotations
-├── files/                      # Saved models and features
-│   ├── features_pca.npy        # PCA-reduced features
-│   ├── labels.npy             # Labels for training data
-│   ├── pca_model.pkl          # PCA model
-│   └── svm_face_mask_model.pkl # Trained SVM model
+├── files/                      # Saved features & models
+│   ├── features_pca.npy
+│   ├── labels.npy
+│   ├── pca_model.pkl
+│   └── svm_face_mask_model.pkl
 ├── preprocess.py               # Feature extraction functions
-├── batch_processing.py         # Script for batch image processing
-├── live_detection.py           # Script for real-time detection
-├── feature_extraction.py       # Script for extracting and saving features
-├── model_training.py           # Script for training and comparing models
+├── feature_extraction.py       # Feature extraction & PCA saving
+├── model_training.py           # Train & evaluate classifiers
+├── batch_processing.py         # Batch image detection
+├── live_detection.py           # Real-time webcam detection
 └── README.md                   # Project documentation
+⚙️ Installation
+Clone the repository:
 
-Installation
-
-
-
-
-
-Clone the Repository:
-
+bash
+Copy
+Edit
 git clone https://github.com/your-username/face-mask-detection.git
 cd face-mask-detection
+Install dependencies:
 
-
-
-Install Dependencies:
-
+bash
+Copy
+Edit
 pip install -r requirements.txt
+Or install manually (as listed in prerequisites).
 
-Alternatively, install the required libraries manually as listed in the Prerequisites section.
+🧪 Usage
+1. Feature Extraction
+Extracts HOG, Chain Code, and GLCM features and applies PCA.
 
-
-
-Prepare the Dataset:
-
-
-
-
-
-Place images in the dataset/with_mask/ and dataset/without_mask/ folders for training.
-
-
-
-Ensure images are in .jpg or .png format.
-
-
-
-Download Haar Cascade:
-
-
-
-
-
-The haarcascade_frontalface_default.xml file is included with OpenCV. Ensure it is accessible via cv2.data.haarcascades.
-
-Usage
-
-The project consists of four main scripts, each serving a specific purpose:
-
-1. Feature Extraction (feature_extraction.py)
-
-Extracts HOG, Chain Code, and GLCM features from the dataset, applies PCA, and saves the results.
-
+bash
+Copy
+Edit
 python feature_extraction.py
+Input: Images in dataset/with_mask/ and dataset/without_mask/
 
+Output: features_pca.npy, labels.npy, pca_model.pkl in files/
 
+2. Model Training
+Trains 4 classifiers and saves the best (SVM by default).
 
-
-
-Input: Images in dataset/with_mask/ and dataset/without_mask/.
-
-
-
-Output: Saves features (features_pca.npy), labels (labels.npy), and PCA model (pca_model.pkl) in the files/ directory.
-
-2. Model Training (model_training.py)
-
-Trains and compares four machine learning models (SVM, Logistic Regression, Random Forest, k-NN) and saves the best model (SVM).
-
+bash
+Copy
+Edit
 python model_training.py
+Output: svm_face_mask_model.pkl in files/
 
+Example:
 
+yaml
+Copy
+Edit
+SVM Accuracy: 94.00% | Time: 12.34s
+Logistic Regression: 89.10% | Time: 8.76s
+Random Forest: 90.80% | Time: 15.67s
+k-NN: 88.00% | Time: 0.02s
+3. Batch Image Processing
+Annotates images in the images/ directory.
 
-
-
-Output: Saves the trained SVM model as svm_face_mask_model.pkl in the files/ directory.
-
-
-
-Performance: Prints accuracy and training time for each model. Example:
-
-SVM Accuracy: 94.00% | Training Time: 12.3400 seconds
-Logistic Regression Accuracy: 89.10% | Training Time: 8.7600 seconds
-Random Forest Accuracy: 90.80% | Training Time: 15.6700 seconds
-K-Nearest Neighbors Accuracy: 88.00% | Training Time: 0.0200 seconds
-
-3. Batch Image Processing (batch_processing.py)
-
-Processes images in the images/ folder, detects faces, classifies mask-wearing status, and saves annotated images.
-
+bash
+Copy
+Edit
 python batch_processing.py
+Output: Annotated images in result/ folder
 
+4. Real-Time Detection
+Performs real-time mask detection via webcam.
 
-
-
-
-Input: Images in the images/ folder.
-
-
-
-Output: Annotated images saved in the result/ folder with rectangles and labels ("Mask" or "No Mask").
-
-4. Real-Time Detection (live_detection.py)
-
-Uses a webcam to detect and classify mask-wearing in real-time.
-
+bash
+Copy
+Edit
 python live_detection.py
+Press q to quit the live feed.
 
+🧠 How It Works
+🔍 Feature Extraction
+Grayscale + resize images to 64x64
 
+Extract:
 
+HOG: gradient directions/magnitudes
 
+Chain Code: edge direction sequences
 
-Controls: Press q to exit the webcam feed.
+GLCM: texture metrics (contrast, energy, etc.)
 
+Combine and reduce with PCA
 
+🤖 Model Training
+Classifiers: SVM (RBF), Logistic Regression, Random Forest, k-NN
 
-Output: Displays a live video feed with rectangles and labels ("With Mask" or "Without Mask") around detected faces.
+Best performer (SVM, 94%) is saved for detection
 
-How It Works
+📸 Detection Pipeline
+Detect face using Haar Cascade
 
+Extract + reduce features
 
+Predict class using trained SVM
 
+Display result with bounding boxes
 
+📊 Performance Summary
+Model	Accuracy	Training Time
+SVM (RBF Kernel)	94.00%	12.34 s
+Logistic Regression	89.10%	8.76 s
+Random Forest	90.80%	15.67 s
+k-NN (k=5)	88.00%	0.02 s
 
-Feature Extraction:
+⚠️ Limitations
+Requires clear, well-lit images.
 
+Accuracy may drop with occlusions or poor lighting.
 
+Webcam performance varies with hardware.
 
+Requires a balanced, diverse dataset for generalization.
 
+🌱 Future Improvements
+Multi-mask-type classification (e.g., cloth, N95).
 
-Images are preprocessed (converted to grayscale, resized to 64x64, normalized).
+Use data augmentation to improve generalization.
 
+Real-time performance tuning for low-end devices.
 
+Deep learning integration (CNN, MobileNet, etc.).
 
-Features are extracted using:
+🤝 Contributing
+Contributions are welcome!
+To contribute:
 
+Fork the repo
 
+Create a branch: git checkout -b feature-branch
 
+Commit your changes: git commit -m "Add feature"
 
+Push the branch: git push origin feature-branch
 
-HOG: Captures gradient directions and magnitudes.
+Open a Pull Request
 
+📜 License
+This project is licensed under the MIT License.
 
+🙏 Acknowledgments
+Built using: OpenCV, scikit-learn, scikit-image
 
-Chain Code: Analyzes edge patterns.
+Inspired by real-world public health applications
 
+Thanks to the open-source community 💙
 
+yaml
+Copy
+Edit
 
-GLCM: Computes texture features (contrast, dissimilarity, homogeneity, energy, correlation).
+---
 
-
-
-Features are combined into a single feature vector and reduced using PCA.
-
-
-
-Model Training:
-
-
-
-
-
-Four models are trained on PCA-reduced features.
-
-
-
-The SVM model with RBF kernel is selected due to its high accuracy (94%).
-
-
-
-Detection:
-
-
-
-
-
-Faces are detected using OpenCV's Haar Cascade classifier.
-
-
-
-Features are extracted from detected faces, reduced by PCA, and classified using the trained SVM model.
-
-
-
-Results are visualized with bounding boxes and labels.
-
-Performance
-
-The project evaluates four machine learning models:
-
-
-
-
-
-SVM (RBF Kernel): 94% accuracy, robust for complex data.
-
-
-
-Logistic Regression: 89.1% accuracy, fast but less effective for non-linear data.
-
-
-
-Random Forest: 90.8% accuracy, good for complex data but slower.
-
-
-
-k-NN (k=5): 88% accuracy, fast training but slower prediction.
-
-The SVM model is used for inference due to its superior accuracy.
-
-Limitations
-
-
-
-
-
-Requires clear, well-lit images for accurate face detection.
-
-
-
-Performance may degrade with low-quality images or complex backgrounds.
-
-
-
-Real-time detection depends on the webcam's quality and processing power.
-
-
-
-The dataset should be diverse to ensure robust generalization.
-
-Future Improvements
-
-
-
-
-
-Add support for detecting multiple mask types (e.g., cloth, surgical, N95).
-
-
-
-Implement data augmentation to improve model robustness.
-
-
-
-Optimize real-time detection for lower-end hardware.
-
-
-
-Explore deep learning models (e.g., CNNs) for potentially higher accuracy.
-
-Contributing
-
-Contributions are welcome! Please follow these steps:
-
-
-
-
-
-Fork the repository.
-
-
-
-Create a new branch (git checkout -b feature-branch).
-
-
-
-Make your changes and commit (git commit -m "Add feature").
-
-
-
-Push to the branch (git push origin feature-branch).
-
-
-
-Create a pull request.
-
-License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
-
-Acknowledgments
-
-
-
-
-
-Built using OpenCV, scikit-learn, and scikit-image.
-
-
-
-Inspired by public health needs for automated mask detection.
-
-
-
-Thanks to the open-source community for providing robust libraries and tools.
+Let me know if you'd like this as a downloadable file or want help turning this into a published GitHub repository.
